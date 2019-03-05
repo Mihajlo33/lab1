@@ -113,6 +113,7 @@ SIGNAL cnt_en_s          : STD_LOGIC;
 SIGNAL button_min_s      : STD_LOGIC;
 SIGNAL button_hour_s     : STD_LOGIC;
 
+
 BEGIN
 
 clk_gen_i:clk_gen             PORT MAP(
@@ -133,7 +134,7 @@ clk_counter_i:clk_counter     PORT MAP(
 
 -- clk_counter modul koji ce se iskoristiti za generisanje takta od 100Hz
 clk_counter_100Hz_i:clk_counter GENERIC MAP(
-                                             max_cnt => -- DODATI KONSTANTU
+                                             max_cnt => "00000001111010000100100000"
                                            )
                                 PORT MAP(
                                          clk_i     => clk_50MHz_s   ,

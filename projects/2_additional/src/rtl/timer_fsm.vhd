@@ -36,6 +36,61 @@ BEGIN
 
 -- DODATI :
 -- automat sa konacnim brojem stanja koji upravlja brojanjem sekundi na osnovu stanja prekidaca
-
+process (clk_i, rst_i) begin
+		if (rst_i = '1') then
+			curent_state_r <= IDLE;
+		elsif (clk_i'event and clk_i = '1') then
+			curent_state_r <= next_state;
+		end if;
+	end process;
+	
+	process (reset_switch_i,start_switch_i,stop_switch_i,continue_switch_i, curent_state_r) begin
+		case (curent_state_r) is
+			when IDLE =>
+				if(reset_switch_i = '1') then
+					next_state <= IDLE;
+					cnt_en_o <= '0';
+					cnt_rst_o <= '1';
+				elsif(start_switch_i = '1') then
+					next_state <= COUNT;
+					cnt_en_o <= '1';
+					cnt_rst_o <= '0';
+				else
+					next_state <= IDLE;
+					cnt_en_o <= '0';
+					cnt_rst_o <= '0';
+				end if;
+			when COUNT =>
+				if(reset_switch_i = '1') then
+					next_state <= IDLE;
+					cnt_en_o <= '0';
+					cnt_rst_o <= '1';
+				elsif(stop_switch_i = '1') then
+					next_state <= STOP;
+					cnt_en_o <= '0';
+					cnt_rst_o <= '0';
+				else
+					next_state <= COUNT;
+					cnt_en_o <= '1';
+					cnt_rst_o <= '0';
+				end if;
+			when others =>
+				if(reset_switch_i = '1') then
+					next_state <= IDLE;
+					cnt_en_o <= '0';
+					cnt_rst_o <= '1';
+				elsif(continue_switch_i = '1') then
+					next_state <= COUNT;
+					cnt_en_o <= '1';
+					cnt_rst_o <= '0';
+				else
+					next_state <= STOP;
+					cnt_en_o <= '0';
+					cnt_rst_o <= '0';
+				end if;
+			
+				
+		end case;
+	end process;
 
 END rtl;
